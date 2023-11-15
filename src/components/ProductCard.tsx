@@ -48,6 +48,8 @@ const ProductCard: React.FC<ProductCardProps> = memo(
         />
         <Text style={styles.priceText}>{'$' + product.price}</Text>
         <Text style={styles.titleText}>{product.title}</Text>
+        <Text style={styles.descriptionText}>Description: </Text>
+        <Text style={styles.descriptionText}>{product.description}</Text>
       </View>
     );
   },
@@ -62,7 +64,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderRadius: hp(1.6),
     backgroundColor: '#FFF',
-    justifyContent: 'center',
     alignItems: 'center',
     shadowColor: '#000',
     shadowOffset: {
@@ -92,6 +93,13 @@ const styles = StyleSheet.create({
   titleText: {
     color: '#797780',
     fontSize: 16,
+    fontFamily: 'JetBrainsMono-Regular',
+  },
+  descriptionText: {
+    color: '#797780',
+    marginTop: hp(2),
+    marginHorizontal: hp(1),
+    fontSize: 14,
     fontFamily: 'JetBrainsMono-Regular',
   },
 });
