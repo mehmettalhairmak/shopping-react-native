@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Product } from '../models/ProductModel';
 import { getProducts } from '../services/api/apiGetProducts';
-import CategoryFilterButton from '../components/CategoryFilterButton';
+import FilterButton from '../components/CategoryFilterButton';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import ProductCard from '../components/ProductCard';
 import SortingModal from '../components/SortingModal';
@@ -18,6 +18,7 @@ import SortingModal from '../components/SortingModal';
 const ProductListScreen = () => {
   const [products, setProducts] = useState<Product[]>();
   const [searchText, setSearchText] = useState<string>('');
+  const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortedProducts, setSortedProducts] = useState<Product[] | null>();
   const [sortingModalVisible, setSortingModalVisible] =
@@ -53,6 +54,14 @@ const ProductListScreen = () => {
       setSelectedCategory(null);
     } else {
       setSelectedCategory(item);
+    }
+  };
+
+  const brandFiltering = (item: string): void => {
+    if (selectedBrand === item) {
+      setSelectedBrand(null);
+    } else {
+      setSelectedBrand(item);
     }
   };
 
@@ -106,6 +115,20 @@ const ProductListScreen = () => {
     return categories;
   }, [products]);
 
+  //Category list generator function
+  const generatedBrands = useMemo(() => {
+    const brands: string[] = [];
+    products?.forEach(product => {
+      if (
+        !brands.includes(product.brand) &&
+        product.category === selectedCategory
+      ) {
+        brands.push(product.brand);
+      }
+    });
+    return brands;
+  }, [selectedCategory]);
+
   return (
     <SafeAreaView style={styles.container}>
       {/* Header */}
@@ -156,15 +179,42 @@ const ProductListScreen = () => {
                     index === generatedCategories.length - 1 ? 20 : 0,
                 },
               ]}>
-              <CategoryFilterButton
-                category={item}
-                selectedCategory={selectedCategory}
+              <FilterButton
+                filterItem={item}
+                selected={selectedCategory}
                 onPress={() => categoryFiltering(item)}
               />
             </View>
           )}
         />
       </View>
+      {/* Brand List */}
+      {generatedBrands.length > 0 && (
+        <View>
+          <FlatList
+            horizontal
+            data={generatedBrands}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryList}
+            renderItem={({ item, index }) => (
+              <View
+                style={[
+                  styles.categoryItemContainer,
+                  {
+                    marginLeft: index === 0 ? 20 : 0,
+                    marginRight: index === generatedBrands.length - 1 ? 20 : 0,
+                  },
+                ]}>
+                <FilterButton
+                  filterItem={item}
+                  selected={selectedBrand}
+                  onPress={() => brandFiltering(item)}
+                />
+              </View>
+            )}
+          />
+        </View>
+      )}
       {/* Product List */}
       <FlatList
         data={sortedProducts}
@@ -174,49 +224,65 @@ const ProductListScreen = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => {
           if (selectedCategory === null) {
-            if (
-              item.title
-                .toLocaleLowerCase()
-                .includes(searchText.toLocaleLowerCase()) ||
-              item.description
-                .toLocaleLowerCase()
-                .includes(searchText.toLowerCase())
-            ) {
-              return (
-                <ProductCard
-                  product={item}
-                  itemIndex={index}
-                  listCount={products?.length!}
-                />
-              );
-            } else if (searchText === '') {
-              return (
-                <ProductCard
-                  product={item}
-                  itemIndex={index}
-                  listCount={products?.length!}
-                />
-              );
+            if (selectedBrand === null) {
+              if (
+                item.title
+                  .toLocaleLowerCase()
+                  .includes(searchText.toLocaleLowerCase()) ||
+                item.description
+                  .toLocaleLowerCase()
+                  .includes(searchText.toLowerCase())
+              ) {
+                return (
+                  <ProductCard
+                    product={item}
+                    itemIndex={index}
+                    listCount={products?.length!}
+                  />
+                );
+              } else if (searchText === '') {
+                return (
+                  <ProductCard
+                    product={item}
+                    itemIndex={index}
+                    listCount={products?.length!}
+                  />
+                );
+              } else {
+                return null;
+              }
             } else {
               return null;
             }
           } else if (selectedCategory === item.category) {
-            if (
-              item.title
-                .toLocaleLowerCase()
-                .includes(searchText.toLocaleLowerCase()) ||
-              item.description
-                .toLocaleLowerCase()
-                .includes(searchText.toLocaleLowerCase())
-            ) {
-              return (
-                <ProductCard
-                  product={item}
-                  itemIndex={index}
-                  listCount={products?.length!}
-                />
-              );
-            } else if (searchText === '') {
+            if (selectedBrand === item.brand) {
+              if (
+                item.title
+                  .toLocaleLowerCase()
+                  .includes(searchText.toLocaleLowerCase()) ||
+                item.description
+                  .toLocaleLowerCase()
+                  .includes(searchText.toLocaleLowerCase())
+              ) {
+                return (
+                  <ProductCard
+                    product={item}
+                    itemIndex={index}
+                    listCount={products?.length!}
+                  />
+                );
+              } else if (searchText === '') {
+                return (
+                  <ProductCard
+                    product={item}
+                    itemIndex={index}
+                    listCount={products?.length!}
+                  />
+                );
+              } else {
+                return null;
+              }
+            } else if (selectedBrand === null) {
               return (
                 <ProductCard
                   product={item}
