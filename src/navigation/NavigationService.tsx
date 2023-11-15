@@ -10,7 +10,9 @@ const Stack = createNativeStackNavigator<RootStackParams>();
 const NavigationService = () => {
   return (
     <NavigationContainer>
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Navigator
+        screenOptions={{ headerShown: false }}
+        initialRouteName="TabNavigation">
         <Stack.Screen name="TabNavigation" component={TabNavigation} />
         <Stack.Screen
           name="ProductDetailsScreen"
