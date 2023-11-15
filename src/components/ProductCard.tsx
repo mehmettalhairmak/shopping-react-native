@@ -1,9 +1,12 @@
 import React, { memo } from 'react';
-import { Image, StyleSheet, Text, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Product } from '../models/ProductModel';
 import Carousel from 'react-native-reanimated-carousel';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParams } from '../services/navigation/types';
+import { useNavigation } from '@react-navigation/native';
 
 interface ProductCardProps {
   product: Product;
@@ -13,6 +16,9 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = memo(
   ({ product, itemIndex, listCount }) => {
+    const navigation =
+      useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
     return (
       <View
         style={[
@@ -31,25 +37,33 @@ const ProductCard: React.FC<ProductCardProps> = memo(
             style={{ paddingRight: hp(1.2), paddingTop: hp(1.2) }}
           />
         </View>
-        <Carousel
-          width={hp(20)}
-          height={hp(25)}
-          data={product.images}
-          renderItem={({ index }) => (
-            <View style={styles.imageContainer}>
-              <Image
-                source={{ uri: product.images[index] }}
-                style={{ resizeMode: 'contain' }}
-                width={hp(18)}
-                height={hp(25)}
-              />
-            </View>
-          )}
-        />
-        <Text style={styles.priceText}>{'$' + product.price}</Text>
-        <Text style={styles.titleText}>{product.title}</Text>
-        <Text style={styles.descriptionText}>Description: </Text>
-        <Text style={styles.descriptionText}>{product.description}</Text>
+        <TouchableOpacity
+          style={{ flex: 1 }}
+          onPress={() =>
+            navigation.navigate('ProductDetailsScreen', { product })
+          }>
+          <Carousel
+            width={hp(20)}
+            height={hp(25)}
+            data={product.images}
+            renderItem={({ index }) => (
+              <View style={styles.imageContainer}>
+                <Image
+                  source={{ uri: product.images[index] }}
+                  style={{ resizeMode: 'contain' }}
+                  width={hp(18)}
+                  height={hp(25)}
+                />
+              </View>
+            )}
+          />
+          <View style={{ marginLeft: hp(1) }}>
+            <Text style={styles.priceText}>{'$' + product.price}</Text>
+            <Text style={styles.titleText}>{product.title}</Text>
+          </View>
+          <Text style={styles.descriptionText}>Description: </Text>
+          <Text style={styles.descriptionText}>{product.description}</Text>
+        </TouchableOpacity>
       </View>
     );
   },
