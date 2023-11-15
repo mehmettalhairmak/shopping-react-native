@@ -6,6 +6,7 @@ import {
   View,
   FlatList,
   TouchableOpacity,
+  TextInput,
 } from 'react-native';
 import { Product } from '../models/ProductModel';
 import { getProducts } from '../services/api/apiGetProducts';
@@ -16,6 +17,7 @@ import SortingModal from '../components/SortingModal';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<Product[]>();
+  const [searchText, setSearchText] = useState<string>('');
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortedProducts, setSortedProducts] = useState<Product[] | null>();
   const [sortingModalVisible, setSortingModalVisible] =
@@ -121,6 +123,22 @@ const ProductListScreen = () => {
         </View>
         <Text style={styles.subTitle}>Best shopping collection!</Text>
       </View>
+      {/* Search Bar */}
+      <View
+        style={{ marginTop: hp(2), height: hp(5), marginHorizontal: hp(2) }}>
+        <TextInput
+          style={{
+            flex: 1,
+            height: hp(5),
+            borderWidth: 1,
+            borderRadius: 10,
+            paddingHorizontal: 10,
+          }}
+          value={searchText}
+          placeholder="Search"
+          onChangeText={text => setSearchText(text)}
+        />
+      </View>
       {/* Category List */}
       <View>
         <FlatList
@@ -156,21 +174,59 @@ const ProductListScreen = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => {
           if (selectedCategory === null) {
-            return (
-              <ProductCard
-                product={item}
-                itemIndex={index}
-                listCount={products?.length!}
-              />
-            );
+            if (
+              item.title
+                .toLocaleLowerCase()
+                .includes(searchText.toLocaleLowerCase()) ||
+              item.description
+                .toLocaleLowerCase()
+                .includes(searchText.toLowerCase())
+            ) {
+              return (
+                <ProductCard
+                  product={item}
+                  itemIndex={index}
+                  listCount={products?.length!}
+                />
+              );
+            } else if (searchText === '') {
+              return (
+                <ProductCard
+                  product={item}
+                  itemIndex={index}
+                  listCount={products?.length!}
+                />
+              );
+            } else {
+              return null;
+            }
           } else if (selectedCategory === item.category) {
-            return (
-              <ProductCard
-                product={item}
-                itemIndex={index}
-                listCount={products?.length!}
-              />
-            );
+            if (
+              item.title
+                .toLocaleLowerCase()
+                .includes(searchText.toLocaleLowerCase()) ||
+              item.description
+                .toLocaleLowerCase()
+                .includes(searchText.toLocaleLowerCase())
+            ) {
+              return (
+                <ProductCard
+                  product={item}
+                  itemIndex={index}
+                  listCount={products?.length!}
+                />
+              );
+            } else if (searchText === '') {
+              return (
+                <ProductCard
+                  product={item}
+                  itemIndex={index}
+                  listCount={products?.length!}
+                />
+              );
+            } else {
+              return null;
+            }
           } else {
             return null;
           }
