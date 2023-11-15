@@ -4,6 +4,7 @@ import { ProductModelRoot } from '../models/ProductModel';
 import { getProducts } from '../services/api/apiGetProducts';
 import CategoryFilterButton from '../components/CategoryFilterButton';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import ProductCard from '../components/ProductCard';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<ProductModelRoot>();
@@ -75,18 +76,25 @@ const ProductListScreen = () => {
       <FlatList
         data={products?.products}
         style={{ flex: 1 }}
-        renderItem={({ item }) => {
+        numColumns={2}
+        contentContainerStyle={{ marginTop: 20, gap: 20, marginBottom: 20 }}
+        keyExtractor={item => item.id.toString()}
+        renderItem={({ item, index }) => {
           if (selectedCategory === null) {
             return (
-              <View>
-                <Text>{item.title}</Text>
-              </View>
+              <ProductCard
+                product={item}
+                itemIndex={index}
+                listCount={products?.products.length!}
+              />
             );
           } else if (selectedCategory === item.category) {
             return (
-              <View>
-                <Text>{item.title}</Text>
-              </View>
+              <ProductCard
+                product={item}
+                itemIndex={index}
+                listCount={products?.products.length!}
+              />
             );
           } else {
             return null;
