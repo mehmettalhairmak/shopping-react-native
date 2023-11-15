@@ -16,13 +16,13 @@ import SortingModal from '../components/SortingModal';
 
 const ProductListScreen = () => {
   const [products, setProducts] = useState<Product[]>();
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [sortedProducts, setSortedProducts] = useState<Product[] | null>();
   const [sortingModalVisible, setSortingModalVisible] =
     useState<boolean>(false);
   const [selectedSortingMethod, setSelectedSortingMethod] = useState<
     string | null
   >(null);
-  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   //Fetch products, initial load
   useEffect(() => {
@@ -35,11 +35,15 @@ const ProductListScreen = () => {
 
   useEffect(() => {
     if (products !== undefined && products !== null) {
-      console.log('listener 1');
-      console.log(products);
       setSortedProducts(products!);
     }
   }, [products]);
+
+  useEffect(() => {
+    if (sortedProducts === null) {
+      setSortedProducts(products);
+    }
+  }, [sortedProducts]);
 
   //Category filtering function
   const categoryFiltering = (item: string): void => {
@@ -199,7 +203,6 @@ const ProductListScreen = () => {
             setSortedProducts(sorted);
           } else {
             setSortedProducts(null);
-            setSortedProducts(products!);
           }
           setSortingModalVisible(!sortingModalVisible);
         }}
