@@ -44,11 +44,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             onPress={onPress}
-            style={{
-              flex: 1,
-              alignItems: 'center',
-              marginTop: hp(1),
-            }}>
+            style={styles.navigationButton}>
             <IoniconsIcon name={iconName} size={30} />
           </TouchableOpacity>
         );
@@ -63,6 +59,11 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     height: hp(9),
+    justifyContent: 'space-around',
     backgroundColor: '#fff',
+  },
+  navigationButton: {
+    alignItems: 'center',
+    marginTop: hp(1),
   },
 });
