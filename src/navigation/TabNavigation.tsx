@@ -1,7 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import ProductListScreen from '../screen/ProductListScreen';
-import FavoritesListScreen from '../screen/FavoritesListScreen';
+import ProductListScreen from '../screens/ProductListScreen';
+import FavoritesListScreen from '../screens/FavoritesListScreen';
 import { BottomTabParams } from './types';
 import CustomTabBar from '../components/CustomTabBar';
 

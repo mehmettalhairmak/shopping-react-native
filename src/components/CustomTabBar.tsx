@@ -41,6 +41,7 @@ const CustomTabBar = (props: BottomTabBarProps) => {
 
         return (
           <TouchableOpacity
+            key={index}
             accessibilityRole="button"
             accessibilityState={isFocused ? { selected: true } : {}}
             onPress={onPress}
