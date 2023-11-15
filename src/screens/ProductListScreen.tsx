@@ -9,6 +9,7 @@ const ProductListScreen = () => {
   const [products, setProducts] = useState<ProductModelRoot>();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
+  //Fetch products, initial load
   useEffect(() => {
     async function fetchData() {
       const response = await getProducts();
@@ -17,6 +18,7 @@ const ProductListScreen = () => {
     fetchData();
   }, []);
 
+  //Category filtering function
   const categoryFiltering = (item: string): void => {
     if (selectedCategory === item) {
       setSelectedCategory(null);
@@ -25,6 +27,7 @@ const ProductListScreen = () => {
     }
   };
 
+  //Category list generator function
   const generatedCategories = useMemo(() => {
     const categories: string[] = [];
     products?.products?.forEach(product => {
@@ -37,10 +40,12 @@ const ProductListScreen = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View>
+      {/* Header */}
+      <View style={{ marginHorizontal: 20, marginTop: 30 }}>
         <Text style={styles.mainTitle}>Explore</Text>
         <Text style={styles.subTitle}>Best shopping collection!</Text>
       </View>
+      {/* Category List */}
       <View>
         <FlatList
           horizontal
@@ -66,6 +71,7 @@ const ProductListScreen = () => {
           )}
         />
       </View>
+      {/* Product List */}
       <FlatList
         data={products?.products}
         style={{ flex: 1 }}
