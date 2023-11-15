@@ -1,5 +1,5 @@
 import React from 'react';
-import NavigationService from './src/navigation/NavigationService';
+import NavigationService from './src/services/navigation/NavigationService';
 
 const App = () => {
   return <NavigationService />;
