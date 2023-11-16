@@ -14,6 +14,7 @@ export interface Product {
   rating: number;
   stock: number;
   brand: string;
+  favorite?: boolean;
   category: string;
   thumbnail: string;
   images: string[];

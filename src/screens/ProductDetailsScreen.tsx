@@ -1,15 +1,15 @@
-import { useRoute } from '@react-navigation/native';
 import React from 'react';
 import { Image, StyleSheet, Text, View } from 'react-native';
-import { RootRouteProps } from '../services/navigation/types';
 import Carousel from 'react-native-reanimated-carousel';
 import {
   heightPercentageToDP as hp,
   widthPercentageToDP as wp,
 } from 'react-native-responsive-screen';
+import { useAppSelector } from '../hooks/redux';
+import { selectSelectedProduct } from '../services/redux/slices/selectedProductSlice';
 
 const ProductDetailsScreen = () => {
-  const route = useRoute<RootRouteProps<'ProductDetailsScreen'>>();
+  const selectedProduct = useAppSelector(selectSelectedProduct).selectedProduct;
 
   return (
     <View style={styles.container}>
@@ -17,11 +17,11 @@ const ProductDetailsScreen = () => {
         <Carousel
           width={wp(90)}
           height={hp(40)}
-          data={route.params.product.images}
+          data={selectedProduct.images}
           renderItem={({ index }) => (
             <View style={styles.imageContainer}>
               <Image
-                source={{ uri: route.params.product.images[index] }}
+                source={{ uri: selectedProduct.images[index] }}
                 style={{ resizeMode: 'contain' }}
                 width={wp(88)}
                 height={hp(40)}
@@ -30,24 +30,22 @@ const ProductDetailsScreen = () => {
           )}
         />
         <View style={{ marginLeft: hp(1) }}>
-          <Text style={styles.titleText}>{route.params.product.title}</Text>
+          <Text style={styles.titleText}>{selectedProduct.title}</Text>
           <Text
             style={[
               styles.descriptionText,
               { marginHorizontal: hp(0.4), marginTop: hp(2) },
             ]}>
-            {route.params.product.description}
+            {selectedProduct.description}
           </Text>
           <View
             style={{
               marginBottom: hp(2),
               marginTop: hp(2),
             }}>
-            <Text style={styles.priceText}>
-              {'$' + route.params.product.price}
-            </Text>
+            <Text style={styles.priceText}>{'$' + selectedProduct.price}</Text>
             <Text style={styles.discountText}>
-              %{route.params.product.discountPercentage} Discounted!
+              %{selectedProduct.discountPercentage} Discounted!
             </Text>
           </View>
         </View>

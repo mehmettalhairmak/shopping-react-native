@@ -7,6 +7,13 @@ import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParams } from '../services/navigation/types';
 import { useNavigation } from '@react-navigation/native';
+import { useAppDispatch, useAppSelector } from '../hooks/redux';
+import { setSelectedProduct } from '../services/redux/slices/selectedProductSlice';
+import {
+  addFavoriteProduct,
+  removeFavoriteProduct,
+  selectFavoriteProductList,
+} from '../services/redux/slices/favoriteProductListSlice';
 
 interface ProductCardProps {
   product: Product;
@@ -16,8 +23,16 @@ interface ProductCardProps {
 
 const ProductCard: React.FC<ProductCardProps> = memo(
   ({ product, itemIndex, listCount }) => {
+    const dispatch = useAppDispatch();
+    const favoriteProducts = useAppSelector(
+      selectFavoriteProductList,
+    ).favoriteProductList;
     const navigation =
       useNavigation<NativeStackNavigationProp<RootStackParams>>();
+
+    const isFavorited = (): boolean => {
+      return favoriteProducts.some(favProduct => favProduct.id === product.id);
+    };
 
     return (
       <View
@@ -31,17 +46,27 @@ const ProductCard: React.FC<ProductCardProps> = memo(
           },
         ]}>
         <View style={styles.favoriteIconContainer}>
-          <IoniconsIcon
-            size={hp(3)}
-            name="bookmark-outline"
-            style={{ paddingRight: hp(1.2), paddingTop: hp(1.2) }}
-          />
+          <TouchableOpacity
+            onPress={() => {
+              if (isFavorited()) {
+                dispatch(removeFavoriteProduct(product));
+              } else {
+                dispatch(addFavoriteProduct(product));
+              }
+            }}>
+            <IoniconsIcon
+              size={hp(3)}
+              name={isFavorited() ? 'bookmark' : 'bookmark-outline'}
+              style={{ paddingRight: hp(1.2), paddingTop: hp(1.2) }}
+            />
+          </TouchableOpacity>
         </View>
         <TouchableOpacity
           style={{ flex: 1 }}
-          onPress={() =>
-            navigation.navigate('ProductDetailsScreen', { product })
-          }>
+          onPress={() => {
+            dispatch(setSelectedProduct(product));
+            navigation.navigate('ProductDetailsScreen', {});
+          }}>
           <Carousel
             width={hp(20)}
             height={hp(25)}
