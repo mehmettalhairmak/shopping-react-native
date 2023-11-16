@@ -1,17 +1,7 @@
 import React from 'react';
-import {
-  Text,
-  SafeAreaView,
-  FlatList,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from 'react-native';
-import { useAppDispatch, useAppSelector } from '../hooks/redux';
-import {
-  removeFavoriteProduct,
-  selectFavoriteProductList,
-} from '../services/redux/slices/favoriteProductListSlice';
+import { Text, SafeAreaView, FlatList, View, StyleSheet } from 'react-native';
+import { useAppSelector } from '../hooks/redux';
+import { selectFavoriteProductList } from '../services/redux/slices/favoriteProductListSlice';
 import ProductCard from '../components/ProductCard';
 
 const FavoritesListScreen = () => {
