@@ -237,6 +237,7 @@ const ProductListScreen = () => {
               ) {
                 return (
                   <ProductCard
+                    allProducts={products}
                     product={item}
                     itemIndex={index}
                     listCount={products?.length!}
@@ -245,6 +246,7 @@ const ProductListScreen = () => {
               } else if (searchText === '') {
                 return (
                   <ProductCard
+                    allProducts={products}
                     product={item}
                     itemIndex={index}
                     listCount={products?.length!}
@@ -268,6 +270,7 @@ const ProductListScreen = () => {
               ) {
                 return (
                   <ProductCard
+                    allProducts={products}
                     product={item}
                     itemIndex={index}
                     listCount={products?.length!}
@@ -276,6 +279,7 @@ const ProductListScreen = () => {
               } else if (searchText === '') {
                 return (
                   <ProductCard
+                    allProducts={products}
                     product={item}
                     itemIndex={index}
                     listCount={products?.length!}
@@ -287,6 +291,7 @@ const ProductListScreen = () => {
             } else if (selectedBrand === null) {
               return (
                 <ProductCard
+                  allProducts={products}
                   product={item}
                   itemIndex={index}
                   listCount={products?.length!}

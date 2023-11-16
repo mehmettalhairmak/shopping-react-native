@@ -16,13 +16,14 @@ import {
 } from '../services/redux/slices/favoriteProductListSlice';
 
 interface ProductCardProps {
+  allProducts: Product[];
   product: Product;
   itemIndex: number;
   listCount: number;
 }
 
 const ProductCard: React.FC<ProductCardProps> = memo(
-  ({ product, itemIndex, listCount }) => {
+  ({ allProducts, product, itemIndex, listCount }) => {
     const dispatch = useAppDispatch();
     const favoriteProducts = useAppSelector(
       selectFavoriteProductList,
@@ -65,7 +66,10 @@ const ProductCard: React.FC<ProductCardProps> = memo(
           style={{ flex: 1 }}
           onPress={() => {
             dispatch(setSelectedProduct(product));
-            navigation.navigate('ProductDetailsScreen', {});
+            navigation.navigate('ProductDetailsScreen', {
+              productId: product.id,
+              products: allProducts,
+            });
           }}>
           <Carousel
             width={hp(20)}

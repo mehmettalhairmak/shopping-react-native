@@ -1,4 +1,5 @@
 import { NavigatorScreenParams, RouteProp } from '@react-navigation/native';
+import { Product } from '../../models/ProductModel';
 
 export type RootRouteProps<RouteName extends keyof RootStackParams> = RouteProp<
   RootStackParams,
@@ -12,7 +13,10 @@ export type TabRouteProps<RouteName extends keyof BottomTabParams> = RouteProp<
 
 export type RootStackParams = {
   TabNavigation: NavigatorScreenParams<BottomTabParams>;
-  ProductDetailsScreen: {};
+  ProductDetailsScreen: {
+    products: Product[];
+    productId: number;
+  };
 };
 
 export type BottomTabParams = {

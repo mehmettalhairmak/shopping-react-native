@@ -31,6 +31,7 @@ const FavoritesListScreen = () => {
         keyExtractor={item => item.id.toString()}
         renderItem={({ item, index }) => (
           <ProductCard
+            allProducts={favoritedProducts}
             product={item}
             itemIndex={index}
             listCount={favoritedProducts?.length!}
