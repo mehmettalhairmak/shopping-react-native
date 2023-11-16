@@ -54,6 +54,7 @@ const ProductListScreen = () => {
   const categoryFiltering = (item: string): void => {
     if (selectedCategory === item) {
       setSelectedCategory(null);
+      setSelectedBrand(null);
     } else {
       setSelectedCategory(item);
     }
