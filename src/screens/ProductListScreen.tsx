@@ -16,7 +16,7 @@ import ProductCard from '../components/ProductCard';
 import SortingModal from '../components/SortingModal';
 
 const ProductListScreen = () => {
-  const [products, setProducts] = useState<Product[]>();
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchText, setSearchText] = useState<string>('');
   const [selectedBrand, setSelectedBrand] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
@@ -33,7 +33,9 @@ const ProductListScreen = () => {
       const response = await getProducts();
       setProducts(response.products);
     }
-    fetchData();
+    if (products?.length! < 1) {
+      fetchData();
+    }
   }, []);
 
   useEffect(() => {
